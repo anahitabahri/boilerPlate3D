@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { addBoilerPlateMeshes, addStandardMesh, addTexturedMesh } from './addDefaultMeshes'
 import { addLight } from './addDefaultLights'
+import Model from './Model'
 
 const renderer = new THREE.WebGLRenderer({ antialias:true })
 
@@ -15,6 +16,7 @@ const camera = new THREE.PerspectiveCamera(
   100
 )
 
+const mixers = []
 const meshes = {}
 const lights = {}
 
@@ -41,12 +43,29 @@ function init(){
   scene.add(meshes.default)
   scene.add(meshes.standard)
   scene.add(meshes.physical)
-  console.log(meshes.physical)
+  // console.log(meshes.physical)
+  meshes.physical.position.set(-2,2,0)
 
   camera.position.set(0, 0, 5)
 
+  instances()
   resize()
   animate()
+}
+
+function instances() {
+  const flower = new Model({
+    name: 'flower',
+    scene: scene,
+    meshes: meshes,
+    url: 'flowers.glb',
+    scale: new THREE.Vector3(2,2,2),
+    position: new THREE.Vector3(0,-0.8,3),
+    replace: true,
+    animationState: true,
+    mixers: mixers
+  })
+  flower.init()
 }
 
 function resize(){
@@ -58,11 +77,22 @@ function resize(){
 }
 
 function animate(){
-  const tick = clock.getElapsedTime()
+  // const tick = clock.getElapsedTime()
+  const delta = clock.getDelta()
+
   requestAnimationFrame(animate)
 
-  meshes.physical.rotation.y += 0.01
-  meshes.physical.material.displacementScale = Math.sin(tick)
+  // play our animation mixers
+  for(const mixer of mixers){
+    mixer.update(delta)
+  }
+  if (meshes.flower) {
+    // console.log(meshes.flower)
+    meshes.flower.rotation.y -= 0.01
+  }
+
+  // meshes.physical.rotation.y += 0.01
+  // meshes.physical.material.displacementScale = Math.sin(tick)
 
   meshes.default.rotation.x += 0.01
   meshes.default.rotation.y -= 0.01

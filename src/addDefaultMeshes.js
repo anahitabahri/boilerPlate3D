@@ -14,19 +14,19 @@ const loader = new TextureLoader()
 // example function using textures and mesh physical material
 export const addTexturedMesh = () => {
     // color
-    // const color = loader.load('Ice_001_COLOR.jpg')
-    const color = loader.load('Obsidian_002_basecolor.png')
-    // const normal = loader.load('Ice_001_NRM.jpg')
-    const normal = loader.load('Obsidian_002_normal.png')
-    // const displace = loader.load('Ice_001_DISP.png')
-    // const ao = loader.load('Ice_001_OCC.jpg')
-    const ao = loader.load('Obsidian_002_ambientOcclusion.png')
+    const color = loader.load('Ice_001_COLOR.jpg')
+    // const color = loader.load('Obsidian_002_basecolor.png')
+    const normal = loader.load('Ice_001_NRM.jpg')
+    // const normal = loader.load('Obsidian_002_normal.png')
+    const displace = loader.load('Ice_001_DISP.png')
+    const ao = loader.load('Ice_001_OCC.jpg')
+    // const ao = loader.load('Obsidian_002_ambientOcclusion.png')
 
     const sphere = new SphereGeometry(0.5, 100, 100)
     const sphereMaterial = new MeshPhysicalMaterial({
         map: color, 
         normalMap: normal,
-        // displacementMap: displace,
+        displacementMap: displace,
         displacementScale: 0.3,
         aoMap: ao,
         metalness: 0.1,
