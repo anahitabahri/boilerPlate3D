@@ -1,9 +1,12 @@
 import './style.css'
 import * as THREE from 'three'
-import { addBoilerPlateMeshes, addStandardMesh } from './addDefaultMeshes'
+import { addBoilerPlateMeshes, addStandardMesh, addTexturedMesh } from './addDefaultMeshes'
 import { addLight } from './addDefaultLights'
 
 const renderer = new THREE.WebGLRenderer({ antialias:true })
+
+// add clock
+const clock = new THREE.Clock()
 
 const camera = new THREE.PerspectiveCamera(
   75, 
@@ -31,11 +34,14 @@ function init(){
   //  add meshes to our meshes object
   meshes.default = addBoilerPlateMeshes()
   meshes.standard = addStandardMesh()
+  meshes.physical = addTexturedMesh()
 
   // add meshes to our scene
   scene.add(lights.default)
   scene.add(meshes.default)
   scene.add(meshes.standard)
+  scene.add(meshes.physical)
+  console.log(meshes.physical)
 
   camera.position.set(0, 0, 5)
 
@@ -52,7 +58,11 @@ function resize(){
 }
 
 function animate(){
+  const tick = clock.getElapsedTime()
   requestAnimationFrame(animate)
+
+  meshes.physical.rotation.y += 0.01
+  meshes.physical.material.displacementScale = Math.sin(tick)
 
   meshes.default.rotation.x += 0.01
   meshes.default.rotation.y -= 0.01
